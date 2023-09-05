@@ -2,6 +2,16 @@ import { useState } from 'react'
 
 const Button = ({ handleClick, text }) => <button onClick={handleClick}> {text} </button>
 
+const AnecdoteAndPoints = ({ anecdotes, points, selected, title }) => {
+  return(
+    <div>
+    <h1>{title}</h1>
+    <p>{anecdotes[selected]}</p>
+    <p>has {points[selected]} votes</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -13,8 +23,7 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-  // const points = Array(8).fill(0)
-   
+
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
 
@@ -25,13 +34,12 @@ const App = () => {
     setPoints(newPoints)
   }
 
-
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {points[selected]} votes</p>
+      <AnecdoteAndPoints anecdotes={anecdotes} selected={selected} points={points} title='Anecdote of the day'/>
       <Button handleClick={voteForAnecdote} text='vote' />
       <Button handleClick={changeSelected} text='next anecdote' />
+      <AnecdoteAndPoints anecdotes={anecdotes} selected={points.indexOf(Math.max(...points))} points={points} title='Anecdote with most votes'/>
     </div>
   )
 }
