@@ -1,8 +1,10 @@
+import Person from "./Person"
+
 const Persons = ({ filteredPersons }) => { 
   return(
-    <div>
-      {filteredPersons.map(person => <p key={person.id}> {person.name} {person.number}</p>)}
-    </div>
+    <ul>
+      {filteredPersons.map(person => <Person key={person.id} person={person}> </Person>)}
+    </ul>
   )
 }
 
