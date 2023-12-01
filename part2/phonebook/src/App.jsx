@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
+import Notification from './components/Notificacion'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import './index.css'
 import personService from './services/persons'
 
 const App = () => {
@@ -9,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('Waiting for something to happen...')
 
   useEffect(() => {
     personService
@@ -35,6 +38,12 @@ const App = () => {
           .updateNumber(existingPerson.id, personUpdated)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+            setNotificationMessage(
+              `The number of '${existingPerson.name}' has been changed from '${existingPerson.number} to '${personUpdated.number}'`
+            )
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
           })
       }
     } else {
@@ -42,6 +51,12 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setNotificationMessage(
+            `Added ${returnedPerson.name}`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
         })
     }
     setNewName('')
@@ -69,6 +84,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage}/>
       <Filter newFilter={newFilter} handleFilterChange={event => setNewFilter(event.target.value)} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber}/>
